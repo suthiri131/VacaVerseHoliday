@@ -18,6 +18,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <nav>
           <Header />
+          <h1>nav?</h1>
         </nav>
         {children}
       </body>
