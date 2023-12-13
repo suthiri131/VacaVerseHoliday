@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+
 import {
   Navbar,
   NavbarBrand,
@@ -12,11 +15,15 @@ import {
   DropdownMenu,
   Avatar,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import appLogo from "../../_assets/images/logo.png";
 import search from "../../_assets/images/search.png";
 import Image from "next/image";
 import "../Header/header.css";
+
 export default function App() {
+  // const router = useRouter();
+  // const isPageActive = (path) => router.pathname === path;
   const Logo = () => (
     <Image src={appLogo} alt="Logo" width={64} height={32} /> // Set width and height based on your design
   );
@@ -24,25 +31,29 @@ export default function App() {
     <Image src={search} alt="Logo" width={20} height={20} /> // Set width and height based on your design
   );
   return (
-    <Navbar isBordered>
+    <Navbar isBordered className="nav">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-          <Logo />
+          <Link href="/">
+            <Logo />
+          </Link>
         </NavbarBrand>
-        <NavbarContent className=" sm:flex gap-3">
-          <NavbarItem>
-            <Link color="foreground" href="/">
-              Home
+        <NavbarContent className="sm:flex gap-3 itemNav">
+          <NavbarItem >
+            <Link
+              href="/travel"
+              color="foreground"
+              
+            >
+              Travel
             </Link>
           </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="#" aria-current="page" color="secondary">
-              Customers
-            </Link>
-          </NavbarItem>
           <NavbarItem>
-            <Link color="foreground" href="/post">
-              post
+            <Link
+              href="/post"
+              color="foreground"
+            >
+              Post
             </Link>
           </NavbarItem>
         </NavbarContent>

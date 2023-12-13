@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --foreground-rgb: 255, 255, 255;
+  }
+  
+/* header.css */
+.nav {
+    background-color: #1a1a1a !important; 
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+  }
+   a {
+    color: #ffffff ; /* White text color */
+  }
+  
+  a:hover {
+    color: #ffcc00 !important; /* Yellow text color on hover */
+  }
+  
+  /* Add any other styling as per your design */
+  
