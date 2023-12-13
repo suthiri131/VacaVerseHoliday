@@ -4,13 +4,13 @@ import React from "react";
 import Link from "next/link";
 import Image from 'next/image';
 import LogoImage from "../../_assets/images/logo.png";
-
+import '../Header/header.css'
 const Logo = () => (
   <Image
     src={LogoImage}
     alt="Logo"
-    width={120} // Set the width of the logo image
-    height={40} // Set the height of the logo image
+    width={70} // Set the width of the logo image
+    height={70} // Set the height of the logo image
   />
 );
 
@@ -22,7 +22,7 @@ export default function Header() {
           <Logo />
           <ul className="hidden md:flex gap-x-6 text-white">
             <li>
-              <Link href="/about">
+              <Link href="/login">
                 <p>About Us</p>
               </Link>
             </li>
