@@ -61,7 +61,7 @@ exports.createPlace = async (req, res) => {
       status: "success",
       data: {
         place: result,
-        message: "Place added successfully."
+        message: "Place added successfully.",
       },
     });
   } catch (err) {
@@ -73,12 +73,11 @@ exports.createPlace = async (req, res) => {
   }
 };
 
-
 exports.updatePlace = async (req, res) => {
   try {
     const placeid = req.params.placeid;
 
-    console.log('placeid', placeid)
+    console.log("placeid", placeid);
 
     const updatedPlace = {
       place_name: req.body.place_name,
@@ -127,7 +126,7 @@ exports.updatePlace = async (req, res) => {
 };
 
 exports.deletePlace = async (req, res) => {
-  console.log('deleting in controller')
+  console.log("deleting in controller");
   try {
     const placeid = req.params.placeid;
 
@@ -160,19 +159,19 @@ exports.deletePlace = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
   try {
-    const categories = await getCategoriesModel();
+    const categories = await place.getCategories();
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
-        categories:categories,
-        message: 'Categories fetched successfully.',
+        categories: categories,
+        message: "Categories fetched successfully.",
       },
     });
   } catch (error) {
-    console.error('Error fetching categories:', error);
+    console.error("Error fetching categories:", error);
     res.status(500).json({
-      status: 'error',
-      message: 'Server error',
+      status: "error",
+      message: "Server error",
     });
   }
 };
@@ -181,11 +180,11 @@ exports.getPlaceByID = async (req, res, next) => {
   console.log("In controller");
   // let placeid = req.params.placeid;
   let placeid = req.params.placeid;
-  console.log('placeid: ', placeid)
+  console.log("placeid: ", placeid);
   try {
     // Call the model function to get all users
     const post = await place.getPlaceByID(placeid);
-    console.log('post', post)
+    console.log("post", post);
     // Send the response to the client
     res.status(200).json({ post });
   } catch (error) {
@@ -198,7 +197,7 @@ exports.getPlaceByID = async (req, res, next) => {
 exports.getAdminSearch = async (req, res, next) => {
   console.log("In controller");
   let place_name = req.query.place_name + "%";
-  console.log('place_name', place_name)
+  console.log("place_name", place_name);
   try {
     // Call the model function to get all users
     const places = await place.getAdminSearch(place_name);
