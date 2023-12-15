@@ -14,13 +14,15 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Badge,
+  Button,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import appLogo from "../../_assets/images/logo.png";
 import search from "../../_assets/images/search.png";
 import Image from "next/image";
 import "../Header/header.css";
-
+import cart from "../../_assets/images/cart.png";
 export default function App() {
   // const router = useRouter();
   // const isPageActive = (path) => router.pathname === path;
@@ -39,23 +41,26 @@ export default function App() {
           </Link>
         </NavbarBrand>
         <NavbarContent className="sm:flex gap-3 itemNav">
-          <NavbarItem >
-            <Link
-              href="/travel"
-              color="foreground"
-              
-            >
+          <NavbarItem>
+            <Link href="/travel" color="foreground">
               Travel
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link
-              href="/post"
-              color="foreground"
-            >
-              Post
+            <Link href="/post" color="foreground">
+              Feed
             </Link>
           </NavbarItem>
+          <Badge content="99+" shape="circle" color="danger">
+            <Button
+              radius="full"
+              isIconOnly
+              aria-label="more than 99 notifications"
+              variant="light"
+            >
+              <Image src={cart} alt="Cart" width={20} height={20} />
+            </Button>
+          </Badge>
         </NavbarContent>
       </NavbarContent>
 
