@@ -33,7 +33,7 @@ export default function App() {
     <Image src={search} alt="Logo" width={20} height={20} /> // Set width and height based on your design
   );
   return (
-    <Navbar isBordered className="nav dark">
+    <Navbar isBordered className="dark">
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           <Link href="/">
@@ -48,7 +48,7 @@ export default function App() {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link href="/feed" color="foreground">
+            <Link href="/post/feed" color="foreground">
               Feed
             </Link>
           </NavbarItem>
