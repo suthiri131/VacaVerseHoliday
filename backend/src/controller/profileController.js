@@ -181,6 +181,23 @@ exports.getPostByUser = async (req, res, next) => {
   }
 };
 
+exports.getPostByCat = async (req, res, next) => {
+  console.log("In place controller category");
+  const userID = req.params.uid;
+  const catID = req.params.catID;
+
+  try {
+    // Call the model function to get all users
+    const allPosts = await profileModel.getPostByCategory(userID, catID);
+    // Send the response to the client
+    res.status(200).json({ posts: allPosts });
+  } catch (error) {
+    console.log("Error: " + error);
+    // Handle the error and send an error response
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 exports.checkIfSave = async (req, res) => {
   try {
     const { userID } = req.params;
@@ -387,7 +404,6 @@ exports.deleteComment = async (req, res, next) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 exports.updateComment = async (req, res) => {
   try {

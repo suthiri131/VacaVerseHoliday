@@ -1,29 +1,52 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Key } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
-import baseURL from "../../../../next.config";
-import { getAllCat } from "../../../../api/post";
-import { Category } from "@/types/interfaces";
-export default function Feed() {
-  const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState("yourPosts");
-  const [cat, setCat] = useState<Category[]>([]); // Explicitly define the type
-  // var uid = localStorage.getItem("userId");
+import { getAllCat, getPostbyCategory } from "../../../../api/post";
+import { Category, PostByCat } from "@/types/interfaces";
+import { usePathname } from "next/navigation";
+import FeedCard from "../../../../components/Cards/feedCard";
+import SearchIcon from "../../../../_assets/images/search.png";
+import Image from "next/image";
 
+export default function Feed() {
+  const [posts, setPosts] = useState<PostByCat[]>([]);
+  const [cat, setCat] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState("following");
+  const uid = 11;
+  const pathname = usePathname();
+
+  const getCatTabDetail = async (catID: number) => {
+    try {
+      setLoading(true);
+      const getPostByCat = await getPostbyCategory(uid, catID);
+      const postData = getPostByCat.posts || [];
+      setPosts(postData);
+      console.log(postData);
+    } catch (error) {
+      console.error("Error fetching posts by category:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-
-        // Fetch user data
         const getCat = await getAllCat();
-
         const catsData = getCat.categories.rows || [];
-        console.log(catsData);
+
+        console.log("catsData:", catsData);
+        console.log("selected:", selected);
+
         setCat(catsData);
+
+        if (selected !== "following") {
+          let idSelected = parseInt(selected);
+
+          getCatTabDetail(idSelected);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -32,17 +55,42 @@ export default function Feed() {
     };
 
     fetchData();
-  }, []);
+  }, [selected]);
 
   return (
-    <div className="flex flex-wrap align-middle gap-4">
-      <Tabs variant="underlined" aria-label="Tabs variants">
-        <Tab key="following" title="For you" />
-        {cat.length > 0 &&
-          cat.map((category) => (
-            <Tab key={category.cat_id} title={category.cat_name} />
-          ))}
-      </Tabs>
+    <div className="flex justify-center flex-wrap gap-4">
+      <div className="row">
+        <div className="col-12 col-md-6 col-sm-4 flex justify-center items-center text-center">
+          <Tabs
+            variant="underlined"
+            aria-label="Options"
+            selectedKey={selected}
+            onSelectionChange={(newSelectedKey: Key) =>
+              setSelected(newSelectedKey as string)
+            }
+          >
+            <Tab key="following" title="For you" />
+            {cat.length > 0 &&
+              cat.map((category) => (
+                <Tab key={category.cat_id} title={category.cat_name} />
+              ))}
+          </Tabs>
+      
+            {/* <Image src={SearchIcon} alt="Search Icon" className="w-5 h-5 ml-5" /> */}
+        
+        </div>
+        <div className="col-12">
+          {posts.length > 0 ? (
+            <div>
+              {posts.map((post) => (
+                <FeedCard key={post.post_id} post={post} />
+              ))}
+            </div>
+          ) : (
+            <p>No posts to display.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

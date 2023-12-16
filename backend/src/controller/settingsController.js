@@ -61,7 +61,7 @@ exports.getAllCatController = async (req, res) => {
 
     if (cat) {
       console.log('Categories fetched successfully');
-      console.log(cat);
+      // console.log(cat);
 
       // Send the categories as a JSON response
       res.status(200).json({ success: true, categories: cat });

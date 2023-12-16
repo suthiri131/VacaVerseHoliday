@@ -17,21 +17,43 @@ import {
   Badge,
   Button,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import appLogo from "../_assets/images/logo.png";
-import search from "../_assets/images/search.png";
+import searchImg from "../_assets/images/search.png";
 import Image from "next/image";
+import { useState } from "react";
 // import "../Header/header.css";
 import cart from "../_assets/images/cart.png";
 export default function App() {
-  // const router = useRouter();
+  const router = useRouter();
   // const isPageActive = (path) => router.pathname === path;
-  const Logo = () => (
-    <Image src={appLogo} alt="Logo" width={64} height={32} /> // Set width and height based on your design
-  );
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState("");
+
+  const Logo = () => <Image src={appLogo} alt="Logo" width={64} height={32} />;
   const SearchIcon = () => (
-    <Image src={search} alt="Logo" width={20} height={20} /> // Set width and height based on your design
-  );
+    <Image src={searchImg} alt="Logo" width={20} height={20} />
+  ); // Set width and height based on your design
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    search();
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      search();
+    }
+  };
+
+  const search = () => {
+    // Redirect to /Search with the query parameter
+    router.push({
+      pathname: "/Search",
+      query: { q: query },
+    } as any);
+  };
+
   return (
     <div>
       <Navbar isBordered className="dark">
@@ -39,7 +61,9 @@ export default function App() {
           <NavbarBrand className="mr-4">
             <Link href="/">
               <Logo />
-              <p className="font-bold text-inherit">VACAVERSE</p>
+              <p className="font-bold text-inherit sm:block hidden md:block">
+                VACAVERSE
+              </p>
             </Link>
           </NavbarBrand>
           <NavbarContent className="sm:flex gap-3 itemNav">
@@ -69,7 +93,7 @@ export default function App() {
         <NavbarContent as="div" className="items-center" justify="end">
           <Input
             classNames={{
-              base: "max-w-full sm:max-w-[10rem] h-10",
+              base: "max-w-full sm:max-w-[18rem] h-10",
               mainWrapper: "h-full",
               input: "text-small",
               inputWrapper:
@@ -79,6 +103,7 @@ export default function App() {
             size="sm"
             startContent={<SearchIcon />}
             type="search"
+            
           />
           <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -97,9 +122,11 @@ export default function App() {
                 <p className="font-semibold">Signed in as</p>
                 <p className="font-semibold">zoey@example.com</p>
               </DropdownItem>
-              <DropdownItem key="settings"><Link href="/post/myPost" color="foreground">
-                My Posts
-              </Link></DropdownItem>
+              <DropdownItem key="settings">
+                <Link href="/post/myPost" color="foreground">
+                  My Posts
+                </Link>
+              </DropdownItem>
               <DropdownItem key="team_settings">Team Settings</DropdownItem>
               <DropdownItem key="analytics">Analytics</DropdownItem>
               <DropdownItem key="system">System</DropdownItem>
