@@ -571,6 +571,48 @@ module.exports.getSimilarPosts = async (placeid, userid, postID) => {
     throw error; // You might want to handle or log the error appropriately
   }
 };
+module.exports.getPostByCategory = async (userID, catID) => {
+  try {
+    // Query to get posts
+    const postsQuery = `
+      SELECT p.postid, p.title, p.description, p.locationid, p.userid, pc.cat_id
+      FROM posts p, places pl, places_cat pc
+      WHERE p.locationid=pl.placeid AND
+      pl.cat_id=pc.cat_id AND p.userid <> $1 AND pc.cat_id=$2
+    `;
+
+    // Query to get images
+    const imagesQuery = `
+      SELECT post_id, image_url
+      FROM post_images
+      WHERE post_id IN (
+        SELECT postid
+        FROM posts
+        WHERE userid <> $1
+      )
+    `;
+
+    // Execute both queries concurrently
+    const [postsResult, imagesResult] = await Promise.all([
+      pool.query(postsQuery, [userID, catID]),
+      pool.query(imagesQuery, [userID]),
+    ]);
+
+    // Process the results and join them based on the post_id
+    const posts = postsResult.rows.map((post) => ({
+      ...post,
+      images: imagesResult.rows
+        .filter((image) => image.post_id === post.postid)
+        .map((image) => image.image_url),
+    }));
+
+    return posts;
+  } catch (error) {
+    console.error("Error fetching recommended posts:", error);
+    // Handle or log the error appropriately for your application
+    throw error;
+  }
+};
 
 //su
 module.exports.getCommentsByPostID = async (postID) => {
@@ -642,10 +684,8 @@ module.exports.deleteAllReplies = async (commentID) => {
   }
 };
 
-
 module.exports.deleteComment = async (commentID) => {
   try {
-    
     const result = await pool.query(
       `DELETE FROM comments WHERE commentid = $1`,
       [commentID]
@@ -743,6 +783,3 @@ module.exports.getRepliesbyCommentID = async (commentID) => {
     throw error; // Rethrow the error to handle it in the controller or service layer
   }
 };
-
-
-

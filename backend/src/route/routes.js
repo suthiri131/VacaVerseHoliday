@@ -47,6 +47,7 @@ module.exports = (app, route) => {
     "/api/similarPlacePosts/:placeID/:userID/:postID",
     profile.similarPosts
   );
+  route.get("/api/postByCat/:uid/:catID",profile.getPostByCat)
   //bookings
   route.get("/api/getMyUpComingBookings/:uid", booking.UpcomingBookingsByID);
   route.get("/api/getMyPastBookings/:uid", booking.PastBookingsByID);
