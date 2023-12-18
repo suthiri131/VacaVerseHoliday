@@ -22,10 +22,16 @@ app.use((req, res, next) => {
 app.use(router);
 route(app, router);
 // app.use("/api", webhookRoute);
-app.use('/api', webhookRoute);
+app.use("/api", webhookRoute);
 //app.use('/webhook', express.raw({type: '*/*'}))
-
+const http = require("http");
+const socketIO = require("socket.io");
+const server = http.createServer(app);
+const io = socketIO(server)
+io.on('connection',socket =>{
+  console.log('New WS Connection...')
+})
 const port = process.env.PORT || 8081;
-app.listen(port, function () {
+server.listen(port, function () {
   console.log(`App listening on port ${port}`);
 });
